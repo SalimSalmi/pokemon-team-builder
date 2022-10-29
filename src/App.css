@@ -1,0 +1,81 @@
+* {
+    box-sizing:border-box;
+}
+
+:root {
+    --red: #e07070;
+    --white: #FFFFFF;
+    --grey: #F9F9F9;
+    --black: #444444;
+    --dark-grey: #888888;
+    --gap: 2em;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    color: var(--black);
+    background-color: var(--grey);
+}
+
+#root {
+    height: 100%;
+    width: min(1200px,100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-areas: 
+        "nav nav"
+        "aside main";
+    grid-template-columns:
+        100px auto;
+    grid-template-rows:
+        80px auto;
+    gap: var(--gap);
+    padding: var(--gap);
+}
+
+/* NAV -------*/
+nav {
+    grid-area: nav;
+    background-color: var(--red);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns:
+        120px 150px auto;
+    gap: var(--gap); 
+}
+
+nav button {
+    background-color: transparent;
+    border: none;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--white);
+    margin: 0;
+    padding: 0;
+    height: 60px;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+nav button.active {
+    background-color: var(--white);
+    color: var(--red);
+}
+
+/* ASIDE -------*/
+aside {
+    grid-area: aside;
+}
+
+/* MAIN -------*/
+main {
+    grid-area: main;
+}
+
+
+

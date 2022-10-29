@@ -1,0 +1,11 @@
+services:
+  dev:
+    container_name: pokemon-team-builder
+    labels:
+      description: Automatic team builder using favourites pokemon.
+      name: pokemon team builder node project
+    build: .
+    volumes: 
+      - ./src:/app/src
+    ports:
+      - "3000:3000"

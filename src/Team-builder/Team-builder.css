@@ -1,0 +1,28 @@
+.team-builder {
+    display: grid;
+    grid-template-areas:
+    "settings settings"
+    "team stats";
+    gap: 10px;
+}
+
+.team-builder-stats {
+    grid-area: stats;
+    background-color: var(--white);
+    border-radius: 10px;
+}
+
+.team-builder-result {
+    grid-area: team;
+    background-color: var(--white);
+    border-radius: 10px;
+}
+
+.team-builder-options {
+    grid-area: settings;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 1em 10px;
+    padding: 1em;
+    color: var(--dark-grey);
+}

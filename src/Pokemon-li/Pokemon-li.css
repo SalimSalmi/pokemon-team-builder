@@ -1,0 +1,28 @@
+.pokemon-li {
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    height: 4em;
+    align-items: center;
+    padding: 10px;
+    gap: var(--gap);
+}
+
+.pokemon-li:hover {
+    background-color: var(--white);
+}
+
+.pokemon-li-sprite {
+
+}
+
+.pokemon-li-name {
+    flex: 1;
+    height: 4em;
+    line-height: 4em;
+    font-weight: bold;
+}
+
+.pokemon-li .pokemon-li-type {
+    width: 100px;
+}
