@@ -1,8 +1,7 @@
 import './Type-table.css';
 
 import Type from '../Type/Type';
-import types from '../data/pokemon-types';
-types = Object.keys(types);
+const types = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison","Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"]
 
 const TypeTable = ({typeResist, typeWeakness, typeCoverage}) => (
     <table className="type-table">
