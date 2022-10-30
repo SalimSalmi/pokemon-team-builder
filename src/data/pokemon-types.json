@@ -1,51 +1,4 @@
-import pokemons from './data/pokedex';
-
-const mapPokemonTypes = (pokemons, types) => {
-
-    const getTypeAdvantage = (pokemon) => {
-        
-        const typeAdvantage = {}
-        
-        for (let attackingType of Object.values(types)) {
-            let advantage = 1;
-            for (let defendingType of pokemon.types) {
-                    
-                if (attackingType.immunes.includes(defendingType)) 
-                    advantage = 0;
-                
-                if (attackingType.weaknesses.includes(defendingType))
-                    advantage *= 0.5;
-
-                if (attackingType.strengths.includes(defendingType))
-                    advantage *=2;
-            }
-
-            typeAdvantage[attackingType.name] = advantage;
-        }
-
-        return {...pokemon, typeAdvantage }
-    }
-
-    const getTypeCoverage = (pokemon) => {
-        const typeCoverage = {}
-
-        for (let defendingType of Object.values(types)) {
-            let advantage = 0;
-            for (let attackingType of pokemon.types)
-                advantage += defendingType
-                    .weaknesses.includes(attackingType);
-            typeCoverage[defendingType.name] = advantage;
-        }
-
-        return {...pokemon, typeCoverage}
-    }
-    
-    return Object.values(pokemons)
-        .map(getTypeAdvantage)
-        .map(getTypeCoverage)
-}
-
-const types = {
+{
     "Normal": {
         "name":"Normal",
         "immunes":["Ghost"],
@@ -83,7 +36,7 @@ const types = {
         "strengths":["Grass","Ground","Flying","Dragon"]
     },
     "Fighting": {"name":"Fighting","immunes":["Ghost"],"weaknesses":["Poison","Flying","Psychic","Bug","Fairy"],"strengths":["Normal","Ice","Rock","Dark","Steel"]},
-    "Poison": {"name":"Poison","immunes":["Steel"],"weaknesses":["Poison","Ground","Rock","Ghost"],"strengths":["Grass","Fairy"]},
+    "Poinson": {"name":"Poison","immunes":["Steel"],"weaknesses":["Poison","Ground","Rock","Ghost"],"strengths":["Grass","Fairy"]},
     "Ground": {"name":"Ground","immunes":["Flying"],"weaknesses":["Grass","Bug"],"strengths":["Fire","Electric","Poison","Rock","Steel"]},
     "Flying": {"name":"Flying","immunes":[],"weaknesses":["Electric","Rock","Steel"],"strengths":["Grass","Fighting","Bug"]},
     "Psychic": {"name":"Psychic","immunes":["Dark"],"weaknesses":["Psychic","Steel"],"strengths":["Fighting","Poison"]},
@@ -94,8 +47,4 @@ const types = {
     "Dark": {"name":"Dark","immunes":[],"weaknesses":["Fighting","Dark","Fairy"],"strengths":["Psychic","Ghost"]},
     "Steel": {"name":"Steel","immunes":[],"weaknesses":["Fire","Water","Electric","Steel"],"strengths":["Ice","Rock","Fairy"]},
     "Fairy": {"name":"Fairy","immunes":[],"weaknesses":["Fire","Poison","Steel"],"strengths":["Fighting","Dragon","Dark"]}
-
 }
-
-
-export default mapPokemonTypes(pokemons, types);

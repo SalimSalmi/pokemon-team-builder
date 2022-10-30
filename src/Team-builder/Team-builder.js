@@ -3,7 +3,6 @@ import './Team-builder.css';
 import { Fragment, useState } from 'react';
 
 import Team from '../Team/Team';
-import Type from '../Type/Type';
 import TypeTable from '../Type-table/Type-table';
 
 import { createOptimalTeam, getTeamFeatures } from './Algorithm';

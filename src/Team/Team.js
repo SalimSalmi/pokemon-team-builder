@@ -1,5 +1,4 @@
 import './Team.css';
-import Sprite from '../Sprites/Sprite';
 import PokemonLi from '../Pokemon-li/Pokemon-li';
 
 const Team = ({ team }) => (

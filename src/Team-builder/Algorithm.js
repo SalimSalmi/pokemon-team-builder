@@ -1,5 +1,4 @@
-import types from '../data/types.json';
-types = types.map(type=>type.name);
+const types = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison","Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"]
 
 const reducedTypes = types.reduce((acc, cur) => ({...acc, [cur]: 0}), {})
 
@@ -40,7 +39,21 @@ export const scoreTeam = ( team, multipliers ) => {
     return { score, team };
 }
 
-export const createOptimalTeam = ( 
+
+const getUniqueTypes = (pokemons) => pokemons
+    .reduce(
+    (acc, cur) => ({
+        ...acc,
+        [cur.types.toString()]:
+            ({
+                types : cur.types,
+                typeCoverage: cur.typeCoverage,
+                typeAdvantage: cur.typeAdvantage
+            })
+        }), {})
+
+
+const optimalTypes = ( 
         team,
         pokemon,
         multipliers,
@@ -49,14 +62,14 @@ export const createOptimalTeam = (
     if (team.length + pokemon.length === 6)
         return scoreTeam([...team, ...pokemon], multipliers);
 
-    const option1 = createOptimalTeam(
+    const option1 = optimalTypes(
         [...team, pokemon[0]],
         pokemon.slice(1, pokemon.length),
         multipliers,
         random
     )
     
-    const option2 = createOptimalTeam(
+    const option2 = optimalTypes(
         team,
         pokemon.slice(1, pokemon.length),
         multipliers,
@@ -70,9 +83,35 @@ export const createOptimalTeam = (
     if (random)
         return score > Math.random() ? option1 : option2 
 
-    if (option1.score == option2.score) 
+    if (option1.score === option2.score) 
         return Math.random() > .5 ? option1 : option2
 
     return option1.score > option2.score ? option1 : option2;
 }
 
+const selectPokemonOfType = (pokemons, type) => {
+    const eligible = pokemons.filter(
+        pokemon => pokemon.types.toString() === type)
+
+    return eligible[Math.floor(Math.random() * eligible.length)]
+}
+
+export const createOptimalTeam = (
+        [],
+        pokemon,
+        multipliers,
+        random ) => {
+
+    pokemon = pokemon
+        .map(pokemon => ({...pokemon, types: pokemon.types.sort()}))
+
+    const uniqueTypes = Object.values(getUniqueTypes(pokemon))
+    const {score, team} = optimalTypes(
+        [], uniqueTypes, multipliers, random)
+
+    return {
+        score,
+        team: team.map(type =>
+            selectPokemonOfType(pokemon, type.types.toString()))
+    }
+}

@@ -1,4 +1,4 @@
-import sprites from './sprites.png';
+// import sprites from './sprites.png';
 import './sprites.css';
 
 const Sprite = ({ pokemon }) => (
