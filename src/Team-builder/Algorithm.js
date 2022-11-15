@@ -10,7 +10,7 @@ export const getTeamFeatures = ( team ) => {
     
     for ( let type of types ) {
         for ( let pokemon of team ) { 
-            typeCoverage[type] += pokemon.typeCoverage[type];
+            typeCoverage[type] += pokemon.typeCoverage[type] > 1;
             typeResist[type] += pokemon.typeAdvantage[type] < 1;
             typeWeakness[type] += pokemon.typeAdvantage[type] > 1;
         }
@@ -106,6 +106,7 @@ export const createOptimalTeam = (
         .map(pokemon => ({...pokemon, types: pokemon.types.sort()}))
 
     const uniqueTypes = Object.values(getUniqueTypes(pokemon))
+    console.log('Number of unique types',uniqueTypes.length)
     const {score, team} = optimalTypes(
         [], uniqueTypes, multipliers, random)
 

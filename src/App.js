@@ -5,6 +5,8 @@ import TeamBuilder from './Team-builder/Team-builder';
 import Pokedex from './Pokedex/Pokedex';
 import Selected from './Selected/Selected';
 
+import test from './Team-builder/AlgorithmNew.js';
+
 import pokemons from './pokemons';
 const types = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison","Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"]
 
@@ -15,6 +17,8 @@ const initialSelected = url.searchParams.has('s') ?
     .get('s').split('s').map(n=>pokemons[parseInt(n)])
     .reduce((a,c) => ({...a, [c.alias]: c}),{}) :
     {}
+
+test(pokemons)
 
 const App = () => {
     const [activePanel, setPanel] = useState(false); 
@@ -36,7 +40,6 @@ const App = () => {
     const selectedNrs = Object.values(selectedPokemon).map(s => 
         pokemons.map(p=>p.alias).indexOf(s.alias)
     )
-
 
     selectedNrs.length > 0 ? 
         url.searchParams.set('s', selectedNrs.join('s')) :

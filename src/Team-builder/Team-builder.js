@@ -31,6 +31,7 @@ const TeamBuilder = ({ selectedPokemon }) => {
         setTeamScore(score)
     }
 
+
     return (
         <div className="team-builder">
             <div className="team-builder-options">
@@ -42,7 +43,7 @@ const TeamBuilder = ({ selectedPokemon }) => {
                     value={resistMultiplier} 
                     type="range" min="1" max="10" />
                 <div>
-                    Few weaknesses
+                    Covered weaknesses
                 </div>
                 <input onChange={(e) =>
                             setWeaknessMultiplier(e.target.value)}
