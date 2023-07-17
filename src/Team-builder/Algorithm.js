@@ -8,7 +8,6 @@ export const getTeamFeatures = ( team ) => {
     const typeResist = {...reducedTypes}
     const typeWeakness = {...reducedTypes}
     
-
     for ( let type of types ) {
         for ( let pokemon of team ) { 
             typeCoverage[type] += pokemon.typeCoverage[type] >= 1;
@@ -32,10 +31,8 @@ export const scoreTeam = ( team, multipliers ) => {
         score += Math.min(typeResist[type], multipliers['resist']);
         score -= Math.max(typeWeakness[type], multipliers['weakness']);
     }
-    console.log(score, multipliers);
     return { score, team };
 }
-
 
 const getUniqueTypes = (pokemons) => pokemons
     .reduce(
@@ -49,15 +46,15 @@ const getUniqueTypes = (pokemons) => pokemons
             })
         }), {})
 
-
 const optimalTypes = ( 
         team,
         pokemon,
         multipliers,
         random ) => {
     if (team.length === 6) return scoreTeam(team, multipliers);
-    if (team.length + pokemon.length === 6)
-        return scoreTeam([...team, ...pokemon], multipliers);
+    // if (team.length + pokemon.length === 6)
+    //     return scoreTeam([...team, ...pokemon], multipliers);
+    if (pokemon.length === 0) return { score: -10000, team }
 
     const option1 = optimalTypes(
         [...team, pokemon[0]],
@@ -86,30 +83,40 @@ const optimalTypes = (
     return option1.score > option2.score ? option1 : option2;
 }
 
-const selectPokemonOfType = (pokemons, type) => {
+const selectPokemonOfType = (lockedPokemon, pokemons, type) => {
+
+    const eligibleLocked = lockedPokemon.filter(
+        pokemon => pokemon.types.toString() === type);
+
+    if (eligibleLocked.length > 0) 
+        return eligibleLocked[Math.floor(Math.random() * eligibleLocked.length)]
+
     const eligible = pokemons.filter(
-        pokemon => pokemon.types.toString() === type)
+        pokemon => pokemon.types.toString() === type);
 
     return eligible[Math.floor(Math.random() * eligible.length)]
 }
 
 export const createOptimalTeam = (
-        currentTeam,
+        lockedPokemon,
         pokemon,
         multipliers,
         random ) => {
 
     pokemon = pokemon
-        .map(pokemon => ({...pokemon, types: pokemon.types.sort()}))
+        .map(pokemon => ({...pokemon, types: pokemon.types.sort()}));
 
-    const uniqueTypes = Object.values(getUniqueTypes(pokemon))
-    console.log('Number of unique types',uniqueTypes.length)
+    lockedPokemon = lockedPokemon
+        .map(pokemon => ({...pokemon, types: pokemon.types.sort()}));
+
+    const selectableTypes= Object.values(getUniqueTypes(pokemon));
+    const lockedTypes = Object.values(getUniqueTypes(lockedPokemon));
     const {score, team} = optimalTypes(
-        currentTeam, uniqueTypes, multipliers, random)
+        lockedTypes, selectableTypes, multipliers, random)
 
     return {
         score,
         team: team.map(type =>
-            selectPokemonOfType(pokemon, type.types.toString()))
+            selectPokemonOfType(lockedPokemon, pokemon, type.types.toString()))
     }
 }
