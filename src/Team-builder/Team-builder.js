@@ -32,6 +32,10 @@ const TeamBuilder = ({ selectedPokemon }) => {
 
     return (
         <div className="team-builder">
+            <header>
+                <p><b>Set sliders for prefered team consistancy. The builder will try to get the team as close as it can to the parameters that you set.</b></p>
+                <p><b>Guarantee pokemon are included by pressing the lock (L) button.</b></p>
+            </header>
             <div className="team-builder-options">
                 <div>
                     At least how many resists per type?
