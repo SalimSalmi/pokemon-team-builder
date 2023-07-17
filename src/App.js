@@ -5,7 +5,6 @@ import TeamBuilder from './Team-builder/Team-builder';
 import Pokedex from './Pokedex/Pokedex';
 import Selected from './Selected/Selected';
 
-import test from './Team-builder/AlgorithmNew.js';
 
 import pokemons from './pokemons';
 const types = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison","Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"]
@@ -18,7 +17,6 @@ const initialSelected = url.searchParams.has('s') ?
     .reduce((a,c) => ({...a, [c.alias]: c}),{}) :
     {}
 
-test(pokemons)
 
 const App = () => {
     const [activePanel, setPanel] = useState(false); 
@@ -27,14 +25,16 @@ const App = () => {
     const [selectedPokemon, setSelectedPokemon] =
         useState(initialSelected);
     const selectPokemon = pokemon => setSelectedPokemon(
-        {...selectedPokemon, [pokemon.alias]: pokemon})
+        {...selectedPokemon, [pokemon.alias]: pokemon});
+    const lockPokemon = pokemon => setSelectedPokemon(
+        {...selectedPokemon, [pokemon.alias] : {...pokemon, locked : !pokemon.locked}});
     const removePokemon = pokemon => {
         const {[pokemon.alias]: value, ...remaining } = selectedPokemon;
         setSelectedPokemon(remaining)
     }
 
     const pokedexFeatures = {selectPokemon, types, pokemons}
-    const selectFeatures = {selectedPokemon, removePokemon}
+    const selectFeatures = {selectedPokemon, removePokemon, lockPokemon}
     const teamFeatures = {selectedPokemon}
     
     const selectedNrs = Object.values(selectedPokemon).map(s => 
