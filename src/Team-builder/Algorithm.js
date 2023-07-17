@@ -8,9 +8,10 @@ export const getTeamFeatures = ( team ) => {
     const typeResist = {...reducedTypes}
     const typeWeakness = {...reducedTypes}
     
+
     for ( let type of types ) {
         for ( let pokemon of team ) { 
-            typeCoverage[type] += pokemon.typeCoverage[type] > 1;
+            typeCoverage[type] += pokemon.typeCoverage[type] >= 1;
             typeResist[type] += pokemon.typeAdvantage[type] < 1;
             typeWeakness[type] += pokemon.typeAdvantage[type] > 1;
         }
@@ -26,16 +27,12 @@ export const scoreTeam = ( team, multipliers ) => {
 
     let score = 0;
 
-    for (let type of types){
-        score += Math.min(typeCoverage[type], 1) 
-            * multipliers['coverage'];
-        score += Math.min(typeResist[type], 1)
-            * multipliers['resist'];
-        score -= Math.max(1 + typeWeakness[type] - typeResist[type], 0)
-            * multipliers['weakness']
-        // score -= (1 - Math.max(typeWeakness[type], 1))
-        //     * multipliers['weakness']
+    for (let type of types) {
+        score += Math.min(typeCoverage[type], multipliers['coverage']);
+        score += Math.min(typeResist[type], multipliers['resist']);
+        score -= Math.max(typeWeakness[type], multipliers['weakness']);
     }
+    console.log(score, multipliers);
     return { score, team };
 }
 
@@ -97,7 +94,7 @@ const selectPokemonOfType = (pokemons, type) => {
 }
 
 export const createOptimalTeam = (
-        [],
+        currentTeam,
         pokemon,
         multipliers,
         random ) => {
@@ -108,7 +105,7 @@ export const createOptimalTeam = (
     const uniqueTypes = Object.values(getUniqueTypes(pokemon))
     console.log('Number of unique types',uniqueTypes.length)
     const {score, team} = optimalTypes(
-        [], uniqueTypes, multipliers, random)
+        currentTeam, uniqueTypes, multipliers, random)
 
     return {
         score,
