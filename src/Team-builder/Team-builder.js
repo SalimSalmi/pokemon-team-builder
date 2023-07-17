@@ -18,11 +18,9 @@ const TeamBuilder = ({ selectedPokemon }) => {
         coverage: coverageMultiplier
     }
 
-    const startPokemon = Object.values(selectedPokemon).filter(pokemon => pokemon.locked);
-    console.log(startPokemon);
-
     const startOptimalTeam = () => {
-        const pokemon = Object.values(selectedPokemon);
+        const pokemon = Object.values(selectedPokemon).filter(pokemon => !pokemon.locked);
+        const startPokemon = Object.values(selectedPokemon).filter(pokemon => pokemon.locked);
         if (pokemon.length < 6) return
         const {team, score} = 
             createOptimalTeam(startPokemon, pokemon, multipliers, random);
