@@ -32,8 +32,7 @@ const mapPokemonTypes = (pokemons, types) => {
         for (let defendingType of Object.values(types)) {
             let advantage = 0;
             for (let attackingType of pokemon.types)
-                advantage += defendingType
-                    .weaknesses.includes(attackingType);
+                advantage += defendingType.weaknesses.includes(attackingType);
             typeCoverage[defendingType.name] = advantage;
         }
 
