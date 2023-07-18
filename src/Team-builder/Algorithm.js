@@ -1,5 +1,17 @@
 const types = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison","Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"]
 
+const abilities = {
+    'Dry Skin':'Water',
+    'Flash Fire':'Fire',
+    'Levitate':'Ground',
+    'Lightningrod':'Electric',
+    'Sap Sipper':'Grass',
+    'Motor Drive':'Elecric',
+    'Storm Drain':'Water',
+    'Volt Absorb':'Electric',
+    'Water Absorb':'Water'
+}
+
 const reducedTypes = types.reduce((acc, cur) => ({...acc, [cur]: 0}), {})
 
 // Create type map for coverages, resists and weaknesses
@@ -34,15 +46,17 @@ export const scoreTeam = ( team, multipliers ) => {
     return { score, team };
 }
 
+
 const getUniqueTypes = (pokemons) => pokemons
     .reduce(
     (acc, cur) => ({
         ...acc,
-        [cur.types.toString()]:
+        [cur.types.toString() + cur.abilities.filter(a => Object.keys(abilities).includes(a)).toString()]:
             ({
                 types : cur.types,
-                typeCoverage: cur.typeCoverage,
-                typeAdvantage: cur.typeAdvantage
+                abilities : cur.abilities.filter(a => Object.keys(abilities).includes(a)),
+                typeCoverage : cur.typeCoverage,
+                typeAdvantage : cur.typeAdvantage
             })
         }), {})
 
@@ -109,14 +123,15 @@ export const createOptimalTeam = (
     lockedPokemon = lockedPokemon
         .map(pokemon => ({...pokemon, types: pokemon.types.sort()}));
 
-    const selectableTypes= Object.values(getUniqueTypes(pokemon));
-    const lockedTypes = Object.values(getUniqueTypes(lockedPokemon));
+    // const selectableTypes= Object.values(getUniqueTypes(pokemon));
+    // const lockedTypes = Object.values(getUniqueTypes(lockedPokemon));
     const {score, team} = optimalTypes(
-        lockedTypes, selectableTypes, multipliers, random)
+        lockedPokemon, pokemon, multipliers, random)
 
     return {
         score,
-        team: team.map(type =>
-            selectPokemonOfType(lockedPokemon, pokemon, type.types.toString()))
+        team
+        // : team.map(type =>
+        //     selectPokemonOfType(lockedPokemon, pokemon, type.types.toString()))
     }
 }
