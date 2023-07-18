@@ -17,7 +17,7 @@ const mapPokemonTypes = (pokemons, types) => {
                     advantage *= 0.5;
 
                 if (attackingType.strengths.includes(defendingType))
-                    advantage *=2;
+                    advantage *= 2;
             }
 
             typeAdvantage[attackingType.name] = advantage;
@@ -29,11 +29,14 @@ const mapPokemonTypes = (pokemons, types) => {
     const getTypeCoverage = (pokemon) => {
         const typeCoverage = {}
 
-        for (let defendingType of Object.values(types)) {
+        for (let defendingType of Object.keys(types)) {
             let advantage = 0;
-            for (let attackingType of pokemon.types)
-                advantage += defendingType.weaknesses.includes(attackingType);
-            typeCoverage[defendingType.name] = advantage;
+            for (let attackingType of pokemon.types){
+                console.log(types[attackingType], defendingType)
+                if(types[attackingType].strengths.includes(defendingType))
+                    advantage = 1;
+            }
+            typeCoverage[defendingType] = advantage;
         }
 
         return {...pokemon, typeCoverage}

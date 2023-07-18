@@ -10,7 +10,7 @@ export const getTeamFeatures = ( team ) => {
     
     for ( let type of types ) {
         for ( let pokemon of team ) { 
-            typeCoverage[type] += pokemon.typeCoverage[type] >= 1;
+            typeCoverage[type] += pokemon.typeCoverage[type];
             typeResist[type] += pokemon.typeAdvantage[type] < 1;
             typeWeakness[type] += pokemon.typeAdvantage[type] > 1;
         }
