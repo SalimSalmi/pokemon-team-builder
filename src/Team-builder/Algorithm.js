@@ -29,7 +29,7 @@ export const scoreTeam = ( team, multipliers ) => {
     for (let type of types) {
         score += Math.min(typeCoverage[type], multipliers['coverage']);
         score += Math.min(typeResist[type], multipliers['resist']);
-        score -= Math.max(typeWeakness[type], multipliers['weakness']);
+        score += 6 - Math.max(typeWeakness[type], multipliers['weakness']);
     }
     return { score, team };
 }
