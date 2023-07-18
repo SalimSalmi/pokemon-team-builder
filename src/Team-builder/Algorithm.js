@@ -1,20 +1,6 @@
 const types = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison","Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"]
-
-const abilities = {
-    'Dry Skin':'Water',
-    'Flash Fire':'Fire',
-    'Levitate':'Ground',
-    'Lightningrod':'Electric',
-    'Sap Sipper':'Grass',
-    'Motor Drive':'Elecric',
-    'Storm Drain':'Water',
-    'Volt Absorb':'Electric',
-    'Water Absorb':'Water'
-}
-
 const reducedTypes = types.reduce((acc, cur) => ({...acc, [cur]: 0}), {})
 
-// Create type map for coverages, resists and weaknesses
 export const getTeamFeatures = ( team ) => {
     const typeCoverage = {...reducedTypes}
     const typeResist = {...reducedTypes}
@@ -33,11 +19,9 @@ export const getTeamFeatures = ( team ) => {
 
 export const scoreTeam = ( team, multipliers ) => {
 
-    const { typeCoverage, typeResist, typeWeakness } = 
-        getTeamFeatures(team);
+    const { typeCoverage, typeResist, typeWeakness } = getTeamFeatures(team);
 
     let score = 0;
-
     for (let type of types) {
         score += Math.min(typeCoverage[type], multipliers['coverage']);
         score += Math.min(typeResist[type], multipliers['resist']);
@@ -47,18 +31,32 @@ export const scoreTeam = ( team, multipliers ) => {
 }
 
 
-const getUniqueTypes = (pokemons) => pokemons
-    .reduce(
-    (acc, cur) => ({
-        ...acc,
-        [cur.types.toString() + cur.abilities.filter(a => Object.keys(abilities).includes(a)).toString()]:
-            ({
-                types : cur.types,
-                abilities : cur.abilities.filter(a => Object.keys(abilities).includes(a)),
-                typeCoverage : cur.typeCoverage,
-                typeAdvantage : cur.typeAdvantage
-            })
-        }), {})
+// const getUniqueTypes = (pokemons) => pokemons
+//     .reduce(
+//     (acc, cur) => ({
+//         ...acc,
+//         [cur.types.toString() + cur.abilities.filter(a => Object.keys(abilities).includes(a)).toString()]:
+//             ({
+//                 types : cur.types,
+//                 abilities : cur.abilities.filter(a => Object.keys(abilities).includes(a)),
+//                 typeCoverage : cur.typeCoverage,
+//                 typeAdvantage : cur.typeAdvantage
+//             })
+//         }), {})
+
+// const selectPokemonOfType = (lockedPokemon, pokemons, type) => {
+//
+//             const eligibleLocked = lockedPokemon.filter(
+//                     pokemon => pokemon.types.toString() === type);
+//
+//             if (eligibleLocked.length > 0) 
+//                 return eligibleLocked[Math.floor(Math.random() * eligibleLocked.length)]
+//
+//             const eligible = pokemons.filter(
+//                     pokemon => pokemon.types.toString() === type);
+//
+//             return eligible[Math.floor(Math.random() * eligible.length)]
+//     }
 
 const optimalTypes = ( 
         team,
@@ -66,30 +64,31 @@ const optimalTypes = (
         multipliers,
         random ) => {
     if (team.length === 6) return scoreTeam(team, multipliers);
-    // if (team.length + pokemon.length === 6)
-    //     return scoreTeam([...team, ...pokemon], multipliers);
     if (pokemon.length === 0) return { score: -10000, team }
 
+    const newPokemon = pokemon[0];
+    pokemon = pokemon.slice(1, pokemon.length);
+
     const option1 = optimalTypes(
-        [...team, pokemon[0]],
-        pokemon.slice(1, pokemon.length),
+        [...team, newPokemon],
+        pokemon,
         multipliers,
         random
     )
     
     const option2 = optimalTypes(
         team,
-        pokemon.slice(1, pokemon.length),
+        pokemon,
         multipliers,
         random
     )
 
-    const score = Math.pow(option1.score, 2) /
-        (Math.pow(option1.score,2) +
-         Math.pow(option2.score,2))
-
-    if (random)
+    if (random) {
+        const score = Math.pow(option1.score, 2) /
+            (Math.pow(option1.score,2) +
+             Math.pow(option2.score,2))
         return score > Math.random() ? option1 : option2 
+    }
 
     if (option1.score === option2.score) 
         return Math.random() > .5 ? option1 : option2
@@ -97,19 +96,6 @@ const optimalTypes = (
     return option1.score > option2.score ? option1 : option2;
 }
 
-const selectPokemonOfType = (lockedPokemon, pokemons, type) => {
-
-    const eligibleLocked = lockedPokemon.filter(
-        pokemon => pokemon.types.toString() === type);
-
-    if (eligibleLocked.length > 0) 
-        return eligibleLocked[Math.floor(Math.random() * eligibleLocked.length)]
-
-    const eligible = pokemons.filter(
-        pokemon => pokemon.types.toString() === type);
-
-    return eligible[Math.floor(Math.random() * eligible.length)]
-}
 
 export const createOptimalTeam = (
         lockedPokemon,
