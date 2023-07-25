@@ -14,7 +14,7 @@ const immunities = {
 
 const resistances = {
     'Thick Fat': ['Fire', 'Ice'],
-    'Heat Proof': ['Fire']
+    'Heatproof': ['Fire']
 }
 
 const mapPokemonTypes = (pokemons, types) => {
