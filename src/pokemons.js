@@ -1,6 +1,6 @@
 import pokemons from './data/pokedex';
 
-const abilities = {
+const immunities = {
     'Dry Skin':'Water',
     'Flash Fire':'Fire',
     'Levitate':'Ground',
@@ -10,6 +10,10 @@ const abilities = {
     'Storm Drain':'Water',
     'Volt Absorb':'Electric',
     'Water Absorb':'Water'
+}
+
+const resistances = {
+    'Thick Fat': ['Fire', 'Ice']
 }
 
 const mapPokemonTypes = (pokemons, types) => {
@@ -36,9 +40,14 @@ const mapPokemonTypes = (pokemons, types) => {
             typeAdvantage[attackingType.name] = advantage;
         }
 
-        for (let ability of Object.values(pokemon.abilities)) 
-            if (Object.keys(abilities).includes(ability))
-                typeAdvantage[abilities[ability]] = 0;
+        for (let ability of Object.values(pokemon.abilities)) {
+            if (Object.keys(immunities).includes(ability))
+                typeAdvantage[immunities[ability]] = 0;
+            if (Object.keys(resistances).includes(ability)){
+                for( let def_type of resistances[ability])
+                    typeAdvantage[def_type] *= 0.5;
+            }
+        }
 
         return {...pokemon, typeAdvantage }
     }
