@@ -59,7 +59,6 @@ const mapPokemonTypes = (pokemons, types) => {
         for (let defendingType of Object.keys(types)) {
             let advantage = 0;
             for (let attackingType of pokemon.types){
-                console.log(types[attackingType], defendingType)
                 if(types[attackingType].strengths.includes(defendingType))
                     advantage = 1;
             }
